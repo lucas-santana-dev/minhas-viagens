@@ -1,0 +1,68 @@
+@startuml
+!theme black-knight
+
+
+class Viagem {
+  nome: String
+  id: Long
+  dataPartida: LocalDate
+  dataRetorno: LocalDate
+  orcamentoViagem: Double
+  hospedagens: List<Hospedagem>
+  outrasDespesas: List<Despesa>
+  destinos: List<Destino>
+  status: String
+  atividades: List<Atividade>
+  + valorTotalOutrasDespesas(Despesa despesa): Double
+  + calcularCustoTotal(): Double
+  + gerarRelatorio(): String
+
+}
+class Hospedagem {
+  id: Long
+  nome: String
+  endereco: String
+  diarias: Int
+  dataHorarioChecking: Data
+  dataHorarioCheckout: Date
+  valorPorDiaria: Double
+  destino: Destino : composição
+  tipo: String
+
+  + valorTotalDiarias(Double valorPorDiaria):Double
+
+}
+class Despesa {
+  id: Long
+  descricao: String
+  valor: Double
+
+}
+class Destino {
+  id: Long
+  nome: String
+  pais: String
+  moeda: String
+  idioma: String
+  hospedagens: List<Hospedagem> : composição
+  atividades: List<Atividade> : composição
+
+}
+class Atividade {
+  id: Long
+  nome: String
+  descricao: String
+  destino: Destino : composição
+
+}
+Viagem o--* Atividade : composição
+Viagem o--* Hospedagem
+Viagem o--* Despesa
+Viagem o--* Destino : composição
+
+Hospedagem o--* Destino : composição
+Destino o--* Atividade : composição
+
+
+
+@enduml
