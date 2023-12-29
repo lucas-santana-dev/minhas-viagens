@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -63,10 +64,16 @@ fun CardViagem(
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = nomeDaViagen,
-                fontWeight = FontWeight.Black
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.scrim,
             )
-            Text(text = localDaViagem)
-            descricaoDaViagem?.let { Text(text = it) }
+            Text(text = localDaViagem, color = MaterialTheme.colorScheme.scrim)
+            descricaoDaViagem?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.scrim,
+                )
+            }
         }
 
     }
