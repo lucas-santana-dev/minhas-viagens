@@ -110,6 +110,15 @@ fun HomeScreen(navController: NavController) {
         }) {
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { navController.navigate(Destination.CadastroViagemScreen.route) },
+                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                ) {
+                    Icon(Icons.Filled.Add, "Localized description")
+                }
+            },
             topBar = {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -143,23 +152,8 @@ fun HomeScreen(navController: NavController) {
                     scrollBehavior = scrollBehavior,
                 )
             },
-            bottomBar = {
-                BottomAppBar(
-                    actions = {
 
-                    },
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = { navController.navigate(Destination.CadastroViagemScreen.route) },
-                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                        ) {
-                            Icon(Icons.Filled.Add, "Localized description")
-                        }
-                    }
-                )
-            },
-        ) { innerPadding ->
+            ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -186,7 +180,7 @@ fun HomeScreen(navController: NavController) {
                         items(listaViagens) { viagem ->
                             CardViagem(
                                 nomeDaViagen = viagem.nome,
-                                localDaViagem = "",
+                                localDaViagem = "Brasil",
                                 descricaoDaViagem = viagem.descricao
                             )
                         }
