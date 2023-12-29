@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -64,6 +66,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -75,12 +78,14 @@ import com.plusapplc.minhaviagem.data.entity.Viagem
 import com.plusapplc.minhaviagem.ui.composables.CardViagem
 import com.plusapplc.minhaviagem.viewmodels.HomeScreenViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.get
+import org.koin.compose.koinInject
 
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
-    val homeScreenViewModel: HomeScreenViewModel = viewModel()
+    val homeScreenViewModel: HomeScreenViewModel = koinInject<HomeScreenViewModel>()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val context = LocalContext.current
     val windowSizeClass = calculateWindowSizeClass(context as Activity)
@@ -89,10 +94,11 @@ fun HomeScreen() {
         WindowWidthSizeClass.Medium, WindowWidthSizeClass.Compact -> 300.dp
         else -> 250.dp
     }
-    val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var listaViagens by remember { mutableStateOf<List<Viagem>>(emptyList()) }
-
+    LaunchedEffect(Unit) {
+        listaViagens = homeScreenViewModel.getListViagens()
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -157,12 +163,33 @@ fun HomeScreen() {
                     .padding(innerPadding)
                     .fillMaxWidth(),
             ) {
-                CardViagem(
-                    nomeDaViagen = "Viagem de Natal",
-                    localDaViagem = "Porto Seguro - BA",
-                    descricaoDaViagem = "Viagem para visitar o pai de Lana"
-
-                )
+                if (listaViagens.isEmpty()) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Que pena, você ainda não tem nenhuma viagem cadastrada.",
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Para cadastrar uma nova viagem clique no botão + localizado na barra inferior",
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                } else {
+                    LazyColumn {
+                        items(listaViagens) { viagem ->
+                            CardViagem(
+                                nomeDaViagen = viagem.nome,
+                                localDaViagem = homeScreenViewModel.getDestinoNomebyIdViagem(viagem.id),
+                                descricaoDaViagem = viagem.descricao
+                            )
+                        }
+                    }
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ interface DestinoDao {
     suspend  fun deletarDestino(destino: Destino)
 
     @Query ("Select * From destinos Where viagemId = :idViagem")
-    suspend fun destinosByViagem(idViagem : Long): List<Destino>
+    fun destinosByViagem(idViagem : Long): Destino
 
 
 }

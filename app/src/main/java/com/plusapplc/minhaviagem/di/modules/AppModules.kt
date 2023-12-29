@@ -12,6 +12,10 @@ import org.koin.dsl.module
 val appModule = module {
     viewModelOf(::HomeScreenViewModel)
 }
+
+val viewModelModule = module {
+  viewModel { HomeScreenViewModel(get(),get()) }
+}
 val databaseModule = module {
   single {
     Room.databaseBuilder(

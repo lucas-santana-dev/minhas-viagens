@@ -10,6 +10,7 @@ data class Viagem(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val nome: String,
+    val descricao: String,
     val dataPartida: Date,
     val dataRetorno: Date,
     val orcamento: Double,
