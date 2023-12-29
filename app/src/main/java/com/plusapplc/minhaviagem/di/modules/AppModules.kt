@@ -3,6 +3,8 @@ package com.plusapplc.minhaviagem.di.modules
 import android.content.Context
 import androidx.room.Room
 import com.plusapplc.minhaviagem.database.AppDatabase
+import com.plusapplc.minhaviagem.ui.screens.CadastroViagemScreen
+import com.plusapplc.minhaviagem.viewmodels.CadastroViagemViewModel
 import com.plusapplc.minhaviagem.viewmodels.HomeScreenViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -14,20 +16,21 @@ val appModule = module {
 }
 
 val viewModelModule = module {
-  viewModel { HomeScreenViewModel(get(),get()) }
+    viewModel { HomeScreenViewModel(get(), get()) }
+    viewModel { CadastroViagemViewModel(get(), get(), get(), get(), get()) }
 }
 val databaseModule = module {
-  single {
-    Room.databaseBuilder(
-      get<Context>(),
-      AppDatabase::class.java,
-      "appdatabase.db"
-    ).build()
-  }
+    single {
+        Room.databaseBuilder(
+            get<Context>(),
+            AppDatabase::class.java,
+            "appdatabase.db"
+        ).build()
+    }
 
-  single { get<AppDatabase>().viagemDao() }
-  single { get<AppDatabase>().despesasDao() }
-  single { get<AppDatabase>().hospedagemDao() }
-  single { get<AppDatabase>().destinoDao() }
-  single { get<AppDatabase>().atividadeDao() }
+    single { get<AppDatabase>().viagemDao() }
+    single { get<AppDatabase>().despesasDao() }
+    single { get<AppDatabase>().hospedagemDao() }
+    single { get<AppDatabase>().destinoDao() }
+    single { get<AppDatabase>().atividadeDao() }
 }
