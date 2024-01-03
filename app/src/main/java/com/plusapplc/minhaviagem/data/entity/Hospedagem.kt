@@ -12,8 +12,6 @@ data class Hospedagem (
     val viagemId:Long,
     val nome:String,
     val diarias: Int,
-    val dataHorarioChecking: Date,
-    val dataHorarioCheckout: Date,
     val valorDiaria: Double
 
 )

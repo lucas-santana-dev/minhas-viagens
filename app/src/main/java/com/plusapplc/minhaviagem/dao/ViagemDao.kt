@@ -3,6 +3,7 @@ package com.plusapplc.minhaviagem.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.plusapplc.minhaviagem.data.entity.Status
@@ -15,8 +16,8 @@ interface ViagemDao {
     @Query("select * from viagens")
     suspend fun getAll(): List<Viagem>
 
-    @Insert
-    suspend fun inserirViagem(viagem: Viagem)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun inserirViagem(viagem: Viagem): Long
 
     @Update
     suspend fun atualizarViagem(viagem: Viagem)

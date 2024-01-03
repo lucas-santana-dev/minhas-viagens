@@ -3,6 +3,7 @@ package com.plusapplc.minhaviagem.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.plusapplc.minhaviagem.data.entity.Hospedagem
@@ -11,8 +12,8 @@ import com.plusapplc.minhaviagem.data.entity.Hospedagem
 @Dao
 interface HospedagemDao {
 
-    @Insert
-    suspend  fun inserirHospedagem(hospedagem: Hospedagem)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend  fun inserirHospedagem(hospedagem: Hospedagem):Long
 
     @Delete
     suspend  fun deletarHospedagem(hospedagem: Hospedagem)

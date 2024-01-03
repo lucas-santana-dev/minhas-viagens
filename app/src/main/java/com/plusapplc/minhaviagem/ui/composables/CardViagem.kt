@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.plusapplc.minhaviagem.R
 
@@ -65,13 +66,15 @@ fun CardViagem(
             Text(
                 text = nomeDaViagen,
                 fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.scrim,
+                color = Color.Black,
             )
-            Text(text = localDaViagem, color = MaterialTheme.colorScheme.scrim)
+            Text(text = localDaViagem,  color = Color.Black)
             descricaoDaViagem?.let {
                 Text(
                     text = it,
-                    color = MaterialTheme.colorScheme.scrim,
+                    color = Color.Black,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

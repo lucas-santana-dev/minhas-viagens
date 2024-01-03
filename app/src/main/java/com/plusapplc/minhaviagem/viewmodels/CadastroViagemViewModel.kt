@@ -6,13 +6,15 @@ import com.plusapplc.minhaviagem.dao.DespesasDao
 import com.plusapplc.minhaviagem.dao.DestinoDao
 import com.plusapplc.minhaviagem.dao.HospedagemDao
 import com.plusapplc.minhaviagem.dao.ViagemDao
-import com.plusapplc.minhaviagem.data.entity.Status
+import com.plusapplc.minhaviagem.data.entity.Destino
+import com.plusapplc.minhaviagem.data.entity.Hospedagem
 import com.plusapplc.minhaviagem.data.entity.Viagem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class CadastroViagemViewModel(
     private val viagemDao: ViagemDao,
@@ -68,21 +70,21 @@ class CadastroViagemViewModel(
             orcamento.toString()
         }
     }
-
     suspend fun salvarViagem(
         nome: String,
         descricao: String,
-        dataPartidaStr: String,
-        dataRetornoStr: String,
-        orcamento: Double
+        dataPartida: String,
+        dataRetorno: String,
+        orcamento: Double,
+        destino: String,
+        hospedagem: String,
+        valorDiaria: Double,
+        diarias : Int
     ) {
         withContext(Dispatchers.IO) {
-            // Converte as strings de data para objetos Date
-            val formatoData = SimpleDateFormat("ddMMyyyy", Locale.getDefault())
-            val dataPartida = formatoData.parse(dataPartidaStr)
-            val dataRetorno = formatoData.parse(dataRetornoStr)
-
-            // Cria a instância de Viagem
+            val formatoData = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val dataPartida = formatoData.parse(dataPartida)
+            val dataRetorno = formatoData.parse(dataRetorno)
             val novaViagem = Viagem(
                 id = 0,
                 nome = nome,
@@ -91,10 +93,22 @@ class CadastroViagemViewModel(
                 dataRetorno = dataRetorno,
                 orcamento = orcamento
             )
-
-            // Chama a função suspendida do ViagemDao dentro de uma coroutine
-            viagemDao.inserirViagem(novaViagem)
+            val viagemId = viagemDao.inserirViagem(novaViagem)
+            val novaHospedagem = Hospedagem(
+                id = 0,
+                nome = hospedagem,
+                diarias =diarias ,
+                valorDiaria = valorDiaria,
+                viagemId = viagemId
+            )
+            val hospedagemId = hospedagemDao.inserirHospedagem(novaHospedagem)
+            val novoDestino = Destino(
+                id = 0,
+                nome = destino,
+                hospedagemId = hospedagemId,
+                viagemId = viagemId,
+            )
+            destinoDao.inserirDestino(novoDestino)
         }
     }
-
 }
